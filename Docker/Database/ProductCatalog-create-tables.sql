@@ -1,0 +1,20 @@
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Products' and xtype='U')
+BEGIN
+	CREATE TABLE Products(
+		Id INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
+		[Name] VARCHAR(50) NOT NULL,
+		Price DECIMAL (14, 2) NOT NULL,
+		Code VARCHAR(MAX) NOT NULL,
+		Created DATETIME DEFAULT GETDATE(),
+		Modified DATETIME DEFAULT GETDATE()
+	)
+
+	--TABLE TYPE
+
+    CREATE TYPE ProductsTableType AS TABLE(
+      [Name] VARCHAR(50) NOT NULL,
+	  Price DECIMAL(14, 2) NOT NULL,
+	  Code VARCHAR(max) NOT NULL
+    )
+
+END

@@ -1,0 +1,38 @@
+version: '3.4'
+
+networks:
+  productcatalog-network:
+    name: product_catalog_network  
+
+services:
+  mssql:
+    build:
+      context: .
+      dockerfile: sql.Dockerfile
+    container_name: productcatalog.mssql
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment: 
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${MSSQL_PRODUCTCATALOG_PASSWORD}
+    user: root
+    ports: 
+      - "1439:1433"
+    #volumes: 
+    #  - "product-sqldata:/var/opt/mssql"
+    networks:
+        - productcatalog-network
+
+  seq:
+    image: datalust/seq
+    restart: unless-stopped 
+    ports:
+        - 5340:80
+    environment:
+         - ACCEPT_EULA=Y
+    networks:
+        - productcatalog-network
+
+volumes:
+  product-sqldata:
